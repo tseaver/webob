@@ -1,6 +1,7 @@
+# -*- coding: utf-8 -*-
 import unittest
 from io import BytesIO
-
+from six.moves.urllib.parse import quote
 import pytest
 import sys
 
@@ -170,6 +171,37 @@ Content-Disposition: form-data; name="submit"
                   {'name':'title', 'filename':None, 'value':''},
                   {'name':'file', 'filename':'test.txt', 'value':b'Testing 123.\n'},
                   {'name':'submit', 'filename':None, 'value':' Add '}]
+        for x in range(len(fs.list)):
+            for k, exp in expect[x].items():
+                got = getattr(fs.list[x], k)
+                assert got == exp
+
+    def test_fieldstorage_filename_utf8_encoded(self):
+        from webob.compat import cgi_FieldStorage
+
+        BOUNDARY = "4ddfd368-cb07-4b9e-b003-876010298a6c"
+        POSTDATA = """--{boundary}
+Content-Disposition: form-data; name="file"; filename*=utf-8''{filename}
+Content-Type: text/plain
+Content-Length: 5
+
+HELLO
+--{boundary}--""".format(boundary=BOUNDARY, filename=quote("châteu.txt"))
+        env = {
+            "REQUEST_METHOD": "POST",
+            "CONTENT_TYPE": "multipart/form-data; boundary={}".format(BOUNDARY),
+            "CONTENT_LENGTH": str(len(POSTDATA)),
+        }
+        fp = BytesIO(POSTDATA.encode("latin-1"))
+        fs = cgi_FieldStorage(fp, environ=env)
+        assert len(fs.list) == 1
+        expect = [
+            {
+                "name": "file",
+                "filename": "châteu.txt",
+                "value": b"HELLO"
+            },
+        ]
         for x in range(len(fs.list)):
             for k, exp in expect[x].items():
                 got = getattr(fs.list[x], k)
