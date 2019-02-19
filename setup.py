@@ -11,14 +11,17 @@ try:
 except IOError:
     README = CHANGES = ''
 
-testing_extras = [
+requires = [
+    'rfc6266',
+]
+testing_extras = requires + [
     'pytest >= 3.1.0',  # >= 3.1.0 so we can use pytest.param
     'coverage',
     'pytest-cov',
     'pytest-xdist',
     ]
 
-docs_extras = [
+docs_extras = requires + [
     'Sphinx >= 1.7.5',
     'pylons-sphinx-themes',
     ]
@@ -53,6 +56,7 @@ setup(
     package_dir={'': 'src'},
     python_requires='>=2.7,!=3.0.*,!=3.1.*,!=3.2.*',
     zip_safe=True,
+    install_requires=requires,
     extras_require={
         'testing': testing_extras,
         'docs': docs_extras,
