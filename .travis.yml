@@ -40,9 +40,7 @@ script:
     - travis_retry tox
 
 notifications:
-    email:
-      # pyramid-checkins@lists.repoze.org
-      - secure: "g8L8cMCg+rStkVmnPLA2cVQWAJUd7Z24wd/mPULT4G9j7T9vgquXETBTKIpCF3vxTfgOSEWEWEPeAQ7RnhkCpkYMGqcfgLK/6TniTcfGlWdFQnS0bc3gvmrTp4bmgiGLd3Yi+ELhrI0P7Pk+1F3HDy2bgzqiOwqBZXjnkb+xYDQ="
+    email: false
     irc:
       channels:
         # chat.freenode.net#pyramid
