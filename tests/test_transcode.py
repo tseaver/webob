@@ -29,8 +29,6 @@ def test_transcode():
     assert r.text == text
     r = test(t2)
     assert r.text == 'file\n%r' % text.encode('cp1251')
-    r = test(t3)
-    assert r.text, "%s\n%r" % (text == b'foo')
 
 def test_transcode_query():
     req = Request.blank('/?%EF%F0%E8=%E2%E5%F2')
